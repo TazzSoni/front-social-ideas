@@ -25,6 +25,7 @@ const InfinityIdeasListContainer = () => {
     onFilterByText,
     onFilterByUser,
     onMyIdeasPress,
+    onTeacherIdeasPress,
   } = useDashboardController();
 
   return (
@@ -32,6 +33,7 @@ const InfinityIdeasListContainer = () => {
       onFilterByText={onFilterByText}
       onFilterByUser={onFilterByUser}
       onMyIdeasPress={onMyIdeasPress}
+      onTeacherIdeasPress={onTeacherIdeasPress}
     >
       <NewEditIdeaModal
         currentIdea={selectedIdea}

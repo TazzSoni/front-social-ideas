@@ -7,6 +7,7 @@ import findAllIdeasPaginated from "../../usecases/ideas/find-all-ideas-paginated
 import findIdeasByText from "../../usecases/ideas/find-ideas-by-text.usecase";
 import findIdeasByUser from "../../usecases/ideas/find-ideas-by-user.usecase";
 import findMyIdeas from "../../usecases/ideas/find-my-ideas.usecase";
+import findTeacherIdeas from "../../usecases/ideas/find-teacher-ideas.usecase";
 
 import { toast } from "react-toastify";
 
@@ -117,8 +118,18 @@ export default function useDashboardController() {
   const onMyIdeasPress = async () => {
     const { data, status } = await findMyIdeas();
 
-    if (data) {
+    if (data?.length > 0) {
       setFilteredIdeasList(data);
+    } else {
+      toast.info("Não foi possível achar resultados");
+    }
+  };
+
+  const onTeacherIdeasPress = async () => {
+    const { data, status } = await findTeacherIdeas();
+
+    if (data?.content?.length > 0) {
+      setFilteredIdeasList(data.content);
     } else {
       toast.info("Não foi possível achar resultados");
     }
@@ -142,5 +153,6 @@ export default function useDashboardController() {
     onFilterByText,
     onFilterByUser,
     onMyIdeasPress,
+    onTeacherIdeasPress,
   };
 }

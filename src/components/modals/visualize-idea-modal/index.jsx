@@ -22,6 +22,7 @@ import { toast } from "react-toastify";
 import acceptCooworkerRequest from "../../../usecases/ideas/accept-cooworker-request.usecase";
 import deleteCooworkerRequest from "../../../usecases/ideas/delete-cooworker-request.usecase";
 import UserNameWithBadge from "../../user-name-with-badge";
+import { Chip, Divider, Grid } from "@mui/material";
 
 const VisualizeIdeaModal = ({
   open,
@@ -124,13 +125,10 @@ const VisualizeIdeaModal = ({
               </HContainer>
             ) : null}
           </HContainer>
-
           <Text style={{ fontWeight: fontWeights.medium }} variant={"h6"}>
             {idea?.titulo}
           </Text>
-
           <Text variant={"h7"}>{idea?.post}</Text>
-
           <UserNameWithBadge
             suffix={"Autor: "}
             name={idea?.user?.name}
@@ -147,10 +145,30 @@ const VisualizeIdeaModal = ({
             />
           ) : null}
 
+          {idea?.tags?.length > 0 ? (
+            <VContainer spaceChildren={spacings.default}>
+              <Divider />
+              <Text variant={"h7"}>Tags</Text>
+
+              <Grid container spacing={1}>
+                {idea?.tags?.map((tag) => (
+                  <Grid item>
+                    <Chip
+                      label={tag}
+                      style={{
+                        background: colors.primary,
+                        color: colors.white,
+                      }}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+            </VContainer>
+          ) : null}
+          <Divider />
           <Text style={{ alignSelf: "start" }} variant={"h6"}>
             Comentários
           </Text>
-
           <VContainer spaceChildren={spacings.default}>
             {idea?.comment?.map((comment) => {
               return (
@@ -204,7 +222,6 @@ const VisualizeIdeaModal = ({
               );
             })}
           </VContainer>
-
           <HContainer>
             <TextInput
               style={{ width: "100%" }}
@@ -218,7 +235,6 @@ const VisualizeIdeaModal = ({
               Enviar
             </Button>
           </HContainer>
-
           {userIsOwner && cooworkerRequest ? (
             <VContainer style={{ padding: `${spacings.default}px 0` }}>
               <Text style={{ alignSelf: "start" }} variant={"h6"}>

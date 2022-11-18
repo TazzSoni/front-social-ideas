@@ -10,8 +10,9 @@ import Modal from "@mui/material/Modal";
 import { Text } from "../../typography";
 import { TextInput } from "../../text-input";
 import { Button } from "../../buttons/button";
-import { VContainer } from "../../containers";
-import { MenuItem, Select } from "@mui/material";
+import { HContainer, VContainer } from "../../containers";
+import { Chip, Grid, MenuItem, Select } from "@mui/material";
+import colors from "../../../styles/colors";
 
 const NewEditIdeaModal = ({
   open,
@@ -19,14 +20,18 @@ const NewEditIdeaModal = ({
   currentIdea,
   onEditOrCreateIdea,
 }) => {
+  const [ideaNewTag, setIdeaNewTag] = useState("");
+
   const [ideaTitle, setIdeaTitle] = useState("");
   const [ideaDesc, setIdeaDesc] = useState("");
   const [ideaStage, setIdeaStage] = useState("");
+  const [ideaTags, setIdeaTags] = useState([]);
 
   useEffect(() => {
     setIdeaTitle(currentIdea?.titulo);
     setIdeaDesc(currentIdea?.post);
     setIdeaStage(currentIdea?.stage);
+    setIdeaTags(currentIdea?.tags);
   }, [currentIdea]);
 
   const onEditIdeaHandler = async () => {
@@ -36,6 +41,7 @@ const NewEditIdeaModal = ({
       id: currentIdea.id,
       post: ideaDesc,
       titulo: ideaTitle,
+      tags: ideaTags,
     };
 
     const { status } = await updateIdea({ data, stage: ideaStage });
@@ -53,6 +59,7 @@ const NewEditIdeaModal = ({
     const data = {
       post: ideaDesc,
       titulo: ideaTitle,
+      tags: ideaTags,
     };
 
     const { status } = await createNewIdea({ data });
@@ -65,13 +72,33 @@ const NewEditIdeaModal = ({
     }
   };
 
+  const onAddNewTagHandler = () => {
+    const newTag = ideaNewTag.trim().split(" ")[0];
+
+    if (newTag) {
+      if (ideaTags) {
+        const newTagsList = [...ideaTags, newTag];
+        setIdeaTags(newTagsList);
+      } else {
+        setIdeaTags([newTag]);
+      }
+    }
+    setIdeaNewTag("");
+  };
+
+  const onDeleteTagHandler = (tagToDelete) => {
+    const newTagsList = ideaTags?.filter((tag) => tag != tagToDelete);
+
+    setIdeaTags(newTagsList);
+  };
+
   return (
     <Modal open={open} onClose={handleClose}>
       <VContainer style={styles.smallContainer}>
         <VContainer
           style={{
             flex: 1,
-            width: "70%",
+            width: "80%",
             display: "flex",
             padding: "3% 0",
             alignSelf: "center",
@@ -124,6 +151,39 @@ const NewEditIdeaModal = ({
               </Select>
             </VContainer>
           ) : null}
+
+          <VContainer spaceChildren={spacings.large}>
+            <Text variant={"h7"} style={{ alignSelf: "start" }}>
+              Tags
+            </Text>
+            <HContainer style={{ justifyContent: "space-between" }}>
+              <TextInput
+                fullWidth
+                value={ideaNewTag}
+                onChange={({ target }) => setIdeaNewTag(target.value)}
+                placeholder={"insira uma tag aqui..."}
+              />
+              <Button
+                style={{ marginLeft: spacings.default }}
+                intent={"primary"}
+                onClick={() => onAddNewTagHandler()}
+              >
+                Adicionar
+              </Button>
+            </HContainer>
+
+            <Grid container spacing={1}>
+              {ideaTags?.map((tag) => (
+                <Grid item>
+                  <Chip
+                    label={tag}
+                    onDelete={() => onDeleteTagHandler(tag)}
+                    style={{ background: colors.primary, color: colors.white }}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </VContainer>
 
           {currentIdea ? (
             <Button

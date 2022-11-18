@@ -38,6 +38,7 @@ const AppBarWithDrawer = ({
   onFilterByText,
   onFilterByUser,
   onMyIdeasPress,
+  onTeacherIdeasPress,
 }) => {
   const classes = useStyles();
   const navigate = useNavigate();
@@ -66,10 +67,15 @@ const AppBarWithDrawer = ({
       icon: <PersonIcon fontSize={"small"} style={{ alignSelf: "center" }} />,
       type: "option",
     },
-
     {
       title: "Minhas ideias",
       onClick: () => onMyIdeasPress(),
+      icon: <IdeaIcon fontSize={"small"} style={{ alignSelf: "center" }} />,
+      type: "option",
+    },
+    {
+      title: "Ideias de professores",
+      onClick: () => onTeacherIdeasPress(),
       icon: <IdeaIcon fontSize={"small"} style={{ alignSelf: "center" }} />,
       type: "option",
     },
@@ -81,7 +87,7 @@ const AppBarWithDrawer = ({
       },
       icon: <PersonIcon fontSize={"small"} style={{ alignSelf: "center" }} />,
       type: "option",
-    }
+    },
   ];
 
   return (
