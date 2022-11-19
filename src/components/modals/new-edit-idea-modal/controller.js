@@ -41,7 +41,7 @@ export const useNewEditIdeaController = ({
     setIdeaStage(currentIdea?.stage);
     setIdeaTags(currentIdea?.tags);
 
-    setSelectedFile({ id: currentIdea?.fileId, name: currentIdea?.fileId });
+    setSelectedFile({ id: currentIdea?.fileId, name: currentIdea?.fileName });
   }, [currentIdea]);
 
   const onEditIdeaHandler = async () => {
@@ -76,7 +76,7 @@ export const useNewEditIdeaController = ({
       tags: ideaTags,
       file: selectedFile,
     };
-
+    debugger
     const { status } = await createNewIdea({ data });
 
     if (status == 201) {

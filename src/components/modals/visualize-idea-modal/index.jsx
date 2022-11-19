@@ -172,8 +172,8 @@ const VisualizeIdeaModal = ({
               <Text variant={"h7"}>Anexo</Text>
 
               <Chip
-                label={idea?.fileId}
-                onDelete={() => {}}
+                label={idea?.fileName}
+                onDelete={() => { }}
                 deleteIcon={
                   <a
                     download
