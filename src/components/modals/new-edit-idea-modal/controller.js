@@ -43,6 +43,8 @@ export const useNewEditIdeaController = ({
 
     if (currentIdea?.fileId && currentIdea?.fileName) {
       setSelectedFile({ id: currentIdea?.fileId, name: currentIdea?.fileName });
+    } else {
+      setSelectedFile(null);
     }
   }, [currentIdea]);
 
