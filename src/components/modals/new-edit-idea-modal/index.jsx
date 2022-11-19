@@ -133,13 +133,13 @@ const NewEditIdeaModal = ({
               <Text variant={"h7"} style={{ alignSelf: "center" }}>
                 Anexo
               </Text>
-              <IconButton disabled={selectedFile} component={"label"}>
+              <IconButton disabled={(selectedFile == null) ? true : selectedFile.name} component={"label"}>
                 <AddCircleOutlineIcon fontSize={"small"} />
                 <input hidden type={"file"} onChange={onSelectFile} />
               </IconButton>
             </HContainer>
 
-            {selectedFile ? (
+            {(selectedFile == null) ? true : selectedFile.name ? (
               <Chip
                 label={selectedFile?.name}
                 onDelete={() => setSelectedFile(null)}
