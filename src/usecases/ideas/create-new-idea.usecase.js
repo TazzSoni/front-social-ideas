@@ -10,7 +10,20 @@ const createNewIdea = async ({ data }) => {
 
     const url = `${ApiRoutes.POSTS}/${userId}`;
 
-    const response = await AxiosAdapter.post(url, data);
+    const formData = new FormData();
+
+    formData.append("post", data.post);
+    formData.append("titulo", data.titulo);
+    formData.append("tags", data.tags);
+    if (data.file) {
+      formData.append("file", data.file);
+    }
+
+    const response = await AxiosAdapter.post(url, formData, {
+      headers: {
+        "Content-Type": `multipart/form-data; boundary=${formData._boundary}`,
+      },
+    });
 
     return { data: response.data, status: response.status };
   } catch (error) {

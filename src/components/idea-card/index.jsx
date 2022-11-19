@@ -7,7 +7,7 @@ import { IconButton } from "../buttons/iconButton";
 
 import LikeIcon from "@mui/icons-material/ThumbUpOffAlt";
 import DislikeIcon from "@mui/icons-material/ThumbDownOffAlt";
-import { Chip, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 
 import IDEA_STAGE from "../../infra/constants/idea-stage.constant";
 

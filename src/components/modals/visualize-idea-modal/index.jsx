@@ -23,6 +23,8 @@ import acceptCooworkerRequest from "../../../usecases/ideas/accept-cooworker-req
 import deleteCooworkerRequest from "../../../usecases/ideas/delete-cooworker-request.usecase";
 import UserNameWithBadge from "../../user-name-with-badge";
 import { Chip, Divider, Grid } from "@mui/material";
+import DownloadIcon from "@mui/icons-material/Download";
+import ApiRoutes from "../../../infra/constants/api-routes.constant";
 
 const VisualizeIdeaModal = ({
   open,
@@ -81,6 +83,10 @@ const VisualizeIdeaModal = ({
       toast.success("Requisição para colaborador excluída");
       window.location.reload();
     }
+  };
+
+  const buildFileUrlToDownload = (fileId) => {
+    return `https://back-social-ideas.herokuapp.com${ApiRoutes.POSTS}/file/${idea.fileId}`;
   };
 
   const {
@@ -151,21 +157,38 @@ const VisualizeIdeaModal = ({
               <Text variant={"h7"}>Tags</Text>
 
               <Grid container spacing={1}>
-                {idea?.tags?.map((tag) => (
-                  <Grid item>
-                    <Chip
-                      label={tag}
-                      style={{
-                        background: colors.primary,
-                        color: colors.white,
-                      }}
-                    />
+                {idea?.tags?.map((tag, index) => (
+                  <Grid key={index} item>
+                    <Chip label={tag} variant={"outlined"} />
                   </Grid>
                 ))}
               </Grid>
             </VContainer>
           ) : null}
+
+          {idea?.fileId ? (
+            <VContainer spaceChildren={spacings.default}>
+              <Divider />
+              <Text variant={"h7"}>Anexo</Text>
+
+              <Chip
+                label={idea?.fileId}
+                onDelete={() => {}}
+                deleteIcon={
+                  <a
+                    download
+                    style={{ display: "flex" }}
+                    href={buildFileUrlToDownload(idea?.filedId)}
+                  >
+                    <DownloadIcon style={{ display: "flex" }} />
+                  </a>
+                }
+              />
+            </VContainer>
+          ) : null}
+
           <Divider />
+
           <Text style={{ alignSelf: "start" }} variant={"h6"}>
             Comentários
           </Text>

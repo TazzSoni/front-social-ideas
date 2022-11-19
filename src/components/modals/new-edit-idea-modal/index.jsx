@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
-
 import styles from "../styles";
 import spacings from "../../../styles/spacings";
-import updateIdea from "../../../usecases/ideas/update-idea.usecase";
-import createNewIdea from "../../../usecases/ideas/create-new-idea.usecase";
 
 import Modal from "@mui/material/Modal";
 
@@ -12,7 +8,9 @@ import { TextInput } from "../../text-input";
 import { Button } from "../../buttons/button";
 import { HContainer, VContainer } from "../../containers";
 import { Chip, Grid, MenuItem, Select } from "@mui/material";
-import colors from "../../../styles/colors";
+import { useNewEditIdeaController } from "./controller";
+import { IconButton } from "../../buttons/iconButton";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const NewEditIdeaModal = ({
   open,
@@ -20,77 +18,24 @@ const NewEditIdeaModal = ({
   currentIdea,
   onEditOrCreateIdea,
 }) => {
-  const [ideaNewTag, setIdeaNewTag] = useState("");
-
-  const [ideaTitle, setIdeaTitle] = useState("");
-  const [ideaDesc, setIdeaDesc] = useState("");
-  const [ideaStage, setIdeaStage] = useState("");
-  const [ideaTags, setIdeaTags] = useState([]);
-
-  useEffect(() => {
-    setIdeaTitle(currentIdea?.titulo);
-    setIdeaDesc(currentIdea?.post);
-    setIdeaStage(currentIdea?.stage);
-    setIdeaTags(currentIdea?.tags);
-  }, [currentIdea]);
-
-  const onEditIdeaHandler = async () => {
-    if (!currentIdea) return null;
-
-    const data = {
-      id: currentIdea.id,
-      post: ideaDesc,
-      titulo: ideaTitle,
-      tags: ideaTags,
-    };
-
-    const { status } = await updateIdea({ data, stage: ideaStage });
-
-    if (status == 200) {
-      setIdeaTitle("");
-      setIdeaDesc("");
-      onEditOrCreateIdea();
-    }
-  };
-
-  const onCreateNewIdeaHandler = async () => {
-    if (currentIdea) return null;
-
-    const data = {
-      post: ideaDesc,
-      titulo: ideaTitle,
-      tags: ideaTags,
-    };
-
-    const { status } = await createNewIdea({ data });
-
-    if (status == 201) {
-      setIdeaTitle("");
-      setIdeaDesc("");
-      window.location.reload();
-      onEditOrCreateIdea();
-    }
-  };
-
-  const onAddNewTagHandler = () => {
-    const newTag = ideaNewTag.trim().split(" ")[0];
-
-    if (newTag) {
-      if (ideaTags) {
-        const newTagsList = [...ideaTags, newTag];
-        setIdeaTags(newTagsList);
-      } else {
-        setIdeaTags([newTag]);
-      }
-    }
-    setIdeaNewTag("");
-  };
-
-  const onDeleteTagHandler = (tagToDelete) => {
-    const newTagsList = ideaTags?.filter((tag) => tag != tagToDelete);
-
-    setIdeaTags(newTagsList);
-  };
+  const {
+    ideaTags,
+    ideaDesc,
+    ideaTitle,
+    ideaStage,
+    ideaNewTag,
+    onEditIdeaHandler,
+    onAddNewTagHandler,
+    onDeleteTagHandler,
+    onCreateNewIdeaHandler,
+    setIdeaTitle,
+    setIdeaDesc,
+    setIdeaNewTag,
+    setIdeaStage,
+    onSelectFile,
+    selectedFile,
+    setSelectedFile,
+  } = useNewEditIdeaController({ onEditOrCreateIdea, currentIdea });
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -139,11 +84,9 @@ const NewEditIdeaModal = ({
                 Estágio
               </Text>
               <Select
-                style={{ width: "100%" }}
                 value={ideaStage}
-                onChange={({ target }) => {
-                  setIdeaStage(target.value);
-                }}
+                style={{ width: "100%" }}
+                onChange={({ target }) => setIdeaStage(target.value)}
               >
                 <MenuItem value={"DONE"}>Pronto</MenuItem>
                 <MenuItem value={"POSTED"}>Postado</MenuItem>
@@ -173,16 +116,35 @@ const NewEditIdeaModal = ({
             </HContainer>
 
             <Grid container spacing={1}>
-              {ideaTags?.map((tag) => (
-                <Grid item>
+              {ideaTags?.map((tag, index) => (
+                <Grid key={index} item>
                   <Chip
                     label={tag}
+                    variant={"outlined"}
                     onDelete={() => onDeleteTagHandler(tag)}
-                    style={{ background: colors.primary, color: colors.white }}
                   />
                 </Grid>
               ))}
             </Grid>
+          </VContainer>
+
+          <VContainer spaceChildren={spacings.default}>
+            <HContainer>
+              <Text variant={"h7"} style={{ alignSelf: "center" }}>
+                Anexo
+              </Text>
+              <IconButton disabled={selectedFile} component={"label"}>
+                <AddCircleOutlineIcon fontSize={"small"} />
+                <input hidden type={"file"} onChange={onSelectFile} />
+              </IconButton>
+            </HContainer>
+
+            {selectedFile ? (
+              <Chip
+                label={selectedFile?.name}
+                onDelete={() => setSelectedFile(null)}
+              />
+            ) : null}
           </VContainer>
 
           {currentIdea ? (
