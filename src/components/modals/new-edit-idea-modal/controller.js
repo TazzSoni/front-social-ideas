@@ -54,7 +54,9 @@ export const useNewEditIdeaController = ({
       tags: ideaTags,
     };
 
-    if (!selectedFile.id) {
+    if (selectedFile == null) {
+      data = { ...data, file: null }
+    } else if (!selectedFile.id) {
       data = { ...data, file: selectedFile };
     }
 
