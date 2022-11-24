@@ -9,7 +9,7 @@ const login = async (data) => {
 
     return { data: response.data, status: response.status };
   } catch (error) {
-    toast.error("Ocorreu um erro na requisição, tente novamente!");
+    toast.error("Erro ao efetuar login!");
     return { data: null, status: 500 };
   }
 };

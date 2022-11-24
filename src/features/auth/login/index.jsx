@@ -11,6 +11,7 @@ import BackgroundImage from "../../../assets/background.png";
 import login from "../../../usecases/auth/login.usecase";
 import { TextInput } from "../../../components/text-input";
 import { Button } from "../../../components/buttons/button";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const navigate = useNavigate();
