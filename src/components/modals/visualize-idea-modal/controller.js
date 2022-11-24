@@ -40,6 +40,9 @@ const useVisualizeIdeaController = ({
   };
 
   const onAddNewComment = async ({ postId }) => {
+    if (!newComment) {
+      return toast.error("Comentário não pode ser vazio!")
+    }
     setNewComment("");
 
     const { data, status } = await createComment({
