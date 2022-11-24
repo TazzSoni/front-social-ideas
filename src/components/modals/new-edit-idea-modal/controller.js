@@ -41,7 +41,11 @@ export const useNewEditIdeaController = ({
     setIdeaStage(currentIdea?.stage);
     setIdeaTags(currentIdea?.tags);
 
-    setSelectedFile({ id: currentIdea?.fileId, name: currentIdea?.fileName });
+    if (currentIdea?.fileId && currentIdea?.fileName) {
+      setSelectedFile({ id: currentIdea?.fileId, name: currentIdea?.fileName });
+    } else {
+      setSelectedFile(null);
+    }
   }, [currentIdea]);
 
   const onEditIdeaHandler = async () => {
@@ -55,7 +59,7 @@ export const useNewEditIdeaController = ({
     };
 
     if (selectedFile == null) {
-      data = { ...data, file: null }
+      data = { ...data, file: null };
     } else if (!selectedFile.id) {
       data = { ...data, file: selectedFile };
     }
@@ -78,7 +82,7 @@ export const useNewEditIdeaController = ({
       tags: ideaTags,
       file: selectedFile,
     };
-    debugger
+
     const { status } = await createNewIdea({ data });
 
     if (status == 201) {
