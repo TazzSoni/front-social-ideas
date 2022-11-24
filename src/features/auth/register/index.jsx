@@ -24,15 +24,6 @@ const Register = () => {
   const [selectedFile, setSelectedFile] = useState();
   const [preview, setPreview] = useState();
 
-  const validate = (values) => {
-    if (!values) {
-      return toast.error("E-mail não pode ser nulo");
-    } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values)) {
-      return toast.error("E-mail inválido");
-    }
-    return values
-  }
-
   const onRegisterHandler = async () => {
     if (!name) {
       return toast.error("Nome não pode ser nulo");

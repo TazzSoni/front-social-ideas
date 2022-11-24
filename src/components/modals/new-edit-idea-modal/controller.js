@@ -49,6 +49,9 @@ export const useNewEditIdeaController = ({
   }, [currentIdea]);
 
   const onEditIdeaHandler = async () => {
+    if (!ideaTitle || !ideaDesc) {
+      return toast.error("Título e Coonteúdo devem ser preenchidos")
+    }
     if (!currentIdea) return null;
 
     let data = {
@@ -74,6 +77,9 @@ export const useNewEditIdeaController = ({
   };
 
   const onCreateNewIdeaHandler = async () => {
+    if (!ideaTitle || !ideaDesc) {
+      return toast.error("Título e Coonteúdo devem ser preenchidos")
+    }
     if (currentIdea) return null;
 
     const data = {
